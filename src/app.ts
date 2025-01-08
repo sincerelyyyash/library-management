@@ -31,5 +31,17 @@ app.use(express.static("public"))
 
 app.use(cookieParser())
 
+//Routes import 
+import userRouter from "./routes/user.routes"
+import authRouter from "./routes/auth.routes"
+import bookRouter from "./routes/book.routes"
+import paymentRouter from "./routes/payment.routes"
+import analyticsRouter from "./routes/analytics.routes"
+
+app.use("/api/v1/user", userRouter)
+app.use("/api/v1/auth", authRouter)
+app.use("/api/v1/book", bookRouter)
+app.use("/api/v1/payment", paymentRouter)
+app.use("/api/v1/analytics", analyticsRouter)
 
 export { app }
