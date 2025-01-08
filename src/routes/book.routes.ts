@@ -1,6 +1,6 @@
 
 import { Router } from 'express';
-import { addBook, deleteBook, getBooks, updateBook } from '../controllers/book.controller';
+import { addBook, borrowBook, deleteBook, getBooks, returnBook, updateBook } from '../controllers/book.controller';
 
 const router = Router();
 
@@ -9,5 +9,7 @@ router.route("/get-books").get(getBooks)
 router.route("/:isbn").put(updateBook)
 router.route("/:isbn").delete(deleteBook)
 
+router.route("/borrow").post(borrowBook)
+router.route("/return").post(returnBook)
 
 export default router;

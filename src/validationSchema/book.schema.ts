@@ -11,3 +11,13 @@ export const updateBookSchema = z.object({
   copies: z.number().int().min(1).optional(),
 });
 
+
+export const borrowBookSchema = z.object({
+  userId: z.number().int(),
+  bookId: z.number().int(),
+});
+
+export const returnBookSchema = z.object({
+  userId: z.number().int(),
+  bookId: z.number().int(),
+});
