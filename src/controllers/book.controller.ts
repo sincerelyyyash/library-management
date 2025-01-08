@@ -124,7 +124,6 @@ export const borrowBook = asyncHandler(async (req: Request, res: Response) => {
     }));
     throw new ApiError({ statusCode: 400, message: "Validation failed", errors });
   }
-
   const { userId, bookId } = parsedBody.data;
 
   const borrowedCount = await prisma.borrowedBook.count({
