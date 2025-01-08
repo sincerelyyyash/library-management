@@ -1,7 +1,7 @@
 import express from 'express'
 import cors from 'cors';
 import cookieParser from 'cookie-parser'
-
+import rateLimit from 'express-rate-limit';
 
 const app = express()
 
@@ -15,6 +15,12 @@ app.use(cors({
 app.use(express.json({
   limit: "16kb"
 }))
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100
+});
+app.use(limiter);
 
 app.use(express.urlencoded({
   extended: true,
