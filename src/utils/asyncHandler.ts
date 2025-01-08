@@ -1,21 +1,12 @@
-interface ApiResponseConstructorParams<T> {
-  statusCode: number;
-  data: T;
-  message?: string;
-}
+import { Request, Response, NextFunction } from 'express';
 
-class ApiResponse<T> {
-  public statusCode: number;
-  public data: T;
-  public message: string;
-  public success: boolean;
+const asyncHandler = <T>(
+  requestHandler: (req: Request, res: Response, next: NextFunction) => Promise<T>
+) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    Promise.resolve(requestHandler(req, res, next))
+      .catch((err) => next(err));
+  };
+};
 
-  constructor({ statusCode, data, message = "Success" }: ApiResponseConstructorParams<T>) {
-    this.statusCode = statusCode;
-    this.data = data;
-    this.message = message;
-    this.success = statusCode < 400;
-  }
-}
-
-export { ApiResponse };
+export { asyncHandler };

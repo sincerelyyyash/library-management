@@ -1,36 +1,21 @@
-interface ApiErrorConstructorParams {
+interface ApiResponseConstructorParams<T> {
   statusCode: number;
+  data: T;
   message?: string;
-  errors?: any[];
-  stack?: string;
 }
 
-class ApiError extends Error {
+class ApiResponse<T> {
   public statusCode: number;
-  public data: null | any;
+  public data: T;
   public message: string;
   public success: boolean;
-  public errors: any[];
 
-  constructor({
-    statusCode,
-    message = "Something went wrong",
-    errors = [],
-    stack = "",
-  }: ApiErrorConstructorParams) {
-    super(message);
+  constructor({ statusCode, data, message = "Success" }: ApiResponseConstructorParams<T>) {
     this.statusCode = statusCode;
-    this.data = null;
+    this.data = data;
     this.message = message;
-    this.success = false;
-    this.errors = errors;
-
-    if (stack) {
-      this.stack = stack;
-    } else {
-      Error.captureStackTrace(this, this.constructor);
-    }
+    this.success = statusCode < 400;
   }
 }
 
-export { ApiError };
+export { ApiResponse };
