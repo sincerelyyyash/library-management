@@ -1,0 +1,68 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id           Int            @id @default(autoincrement())
+  email        String         @unique
+  password     String
+  role         String
+  isVerified   Boolean        @default(false)
+  deletedAt    DateTime?      @map("deleted_at")
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime       @updatedAt @map("updated_at")
+  BorrowedBook BorrowedBook[]
+  Transaction  Transaction[]
+}
+
+model Book {
+  id        Int       @id @default(autoincrement())
+  isbn      String    @unique
+  title     String
+  copies    Int       @default(1)
+  deletedAt DateTime? @map("deleted_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  authors      Author[]       @relation("BookAuthors")
+  categories   Category[]     @relation("BookCategories")
+  BorrowedBook BorrowedBook[]
+}
+
+model BorrowedBook {
+  id         Int       @id @default(autoincrement())
+  userId     Int
+  bookId     Int
+  borrowedAt DateTime  @default(now())
+  returnBy   DateTime
+  returnedAt DateTime?
+  fine       Float?
+
+  user User @relation(fields: [userId], references: [id])
+  book Book @relation(fields: [bookId], references: [id])
+}
+
+model Transaction {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  amount    Float
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model Category {
+  id    Int    @id @default(autoincrement())
+  name  String
+  books Book[] @relation("BookCategories")
+}
+
+model Author {
+  id    Int    @id @default(autoincrement())
+  name  String
+  books Book[] @relation("BookAuthors")
+}
